@@ -1,0 +1,61 @@
+Unit Test Cases
+---------------
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class ActivityTest {
+    @Test
+    void getAvailableSpaces() {
+        Destination destination = new Destination("Test Destination");
+        Activity activity = new Activity("Test Activity", "Test Description", 20.0, 5, destination);
+        assertEquals(5, activity.getAvailableSpaces());
+        for (int i = 0; i < 3; i++) {
+            activity.addPassenger(new Passenger("Passenger", i + 1, 100.0, PassengerType.STANDARD));
+        }
+        assertEquals(2, activity.getAvailableSpaces());
+    }
+}
+
+class PassengerTest {
+    @Test
+    void enrollForActivity_standardPassenger() {
+        Destination destination = new Destination("Test Destination");
+        Activity activity = new Activity("Test Activity", "Test Description", 20.0, 5, destination);
+        Passenger passenger = new Passenger("Test Passenger", 1, 50.0, PassengerType.STANDARD);
+        passenger.enrollForActivity(activity);
+        assertEquals(30.0, passenger.getBalance());
+        assertEquals(1, passenger.getActivities().size());
+    }
+
+    @Test
+    void enrollForActivity_goldPassenger() {
+        Destination destination = new Destination("Test Destination");
+        Activity activity = new Activity("Test Activity", "Test Description", 20.0, 5, destination);
+        Passenger passenger = new Passenger("Test Passenger", 1, 50.0, PassengerType.GOLD);
+        passenger.enrollForActivity(activity);
+        assertEquals(35.0, passenger.getBalance());
+        assertEquals(1, passenger.getActivities().size());
+    }
+
+    @Test
+    void enrollForActivity_premiumPassenger() {
+        Destination destination = new Destination("Test Destination");
+        Activity activity = new Activity("Test Activity", "Test Description", 20.0, 5, destination);
+        Passenger passenger = new Passenger("Test Passenger", 1, 0.0, PassengerType.PREMIUM);
+        passenger.enrollForActivity(activity);
+        assertEquals(0.0, passenger.getBalance());
+        assertEquals(1, passenger.getActivities().size());
+    }
+}
+
+class TravelPackageTest {
+    @Test
+    void addPassenger() {
+        TravelPackage travelPackage = new TravelPackage("Test Package", 5);
+        Passenger passenger = new Passenger("Test Passenger", 1, 100.0, PassengerType.STANDARD);
+        travelPackage.addPassenger(passenger);
+        assertEquals(1, travelPackage.getPassengers().size());
+    }
+}
